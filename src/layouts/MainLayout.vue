@@ -12,16 +12,18 @@
           color="primary"
           @click="() => $router.push('/')"
         ></q-btn>
-        <q-btn
-          label="Log In"
-          color="secondary"
-          @click="() => $router.push('/LogInPage')"
-        ></q-btn>
-        <q-btn
-          label="Register"
-          color="accent"
-          @click="() => $router.push('/RegisterPage')"
-        ></q-btn>
+        <div class="q-ml-auto q-gutter-x-sm">
+          <q-btn
+            label="Log In"
+            color="secondary"
+            @click="() => $router.push('/LogInPage')"
+          ></q-btn>
+          <q-btn
+            label="Register"
+            color="accent"
+            @click="() => $router.push('/RegisterPage')"
+          ></q-btn>
+        </div>
       </q-toolbar>
     </q-header>
 
