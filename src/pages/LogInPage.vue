@@ -3,7 +3,7 @@
     <h1>Login</h1>
     <q-form @submit.prevent="submitForm">
       <q-card-section>
-        <q-input label="Username" v-model="login.username"></q-input>
+        <q-input label="Email" v-model="login.email"></q-input>
         <q-input
           label="Password"
           type="password"
@@ -31,7 +31,7 @@ export default {
   data() {
     return {
       login: {
-        username: '',
+        email: '',
         password: '',
       },
     };
@@ -39,9 +39,14 @@ export default {
   methods: {
     submitForm() {
       // TODO: Log in user when backend is ready
-      if (!this.login.username || !this.login.password) {
+      if (!this.login.email || !this.login.password) {
         this.$q.notify({
           message: 'Please fill in all fields',
+          color: 'negative',
+        });
+      } else if (!this.login.email.includes('@')) {
+        this.$q.notify({
+          message: 'Please enter a valid email',
           color: 'negative',
         });
       } else if (this.login.password.length < 8) {
