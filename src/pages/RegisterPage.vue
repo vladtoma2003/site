@@ -55,6 +55,7 @@ export default {
     },
     async getUsers() {
       let usersArray = [];
+      console.log('getting users');
       const querySnapshot = await getDocs(collection(db, 'users'));
       querySnapshot.forEach((doc) => {
         const user = {
@@ -71,9 +72,11 @@ export default {
       const users = await this.getUsers();
       users.forEach((user) => {
         if (user.email === email) {
+          console.log(user);
           return true;
         }
       });
+      return false;
     },
     submitReg() {
       if (
@@ -95,11 +98,11 @@ export default {
           message: 'Please enter a valid email',
           color: 'negative',
         });
-      } else if (this.checkExistance(this.register.email)) {
-        this.$q.notify({
-          message: 'Email already exists',
-          color: 'negative',
-        });
+        // } else if (this.checkExistance(this.register.email)) {
+        //   this.$q.notify({
+        //     message: 'Email already exists',
+        //     color: 'negative',
+        //   });
       } else {
         const user = {
           username: this.register.username,
