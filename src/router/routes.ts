@@ -33,7 +33,7 @@ const routes: RouteRecordRaw[] = [
   },
 
   {
-    path: '/UserProfile',
+    path: '/userProfile',
     component: () => import('layouts/MainLayout.vue'),
     children: [{ path: '', component: () => import('pages/UserProfile.vue') }],
   },

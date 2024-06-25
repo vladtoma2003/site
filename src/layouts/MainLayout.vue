@@ -27,7 +27,7 @@
           ></q-btn>
           <q-btn
             v-if="isLoggedIn"
-            @click="() => $router.push('/ProfilePage')"
+            @click="() => $router.push('/userProfile')"
             label="Profile"
             color="primary"
           ></q-btn>
