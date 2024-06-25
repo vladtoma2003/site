@@ -1,5 +1,7 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { LocalStorage } from 'quasar';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyAe8RFK_HyZA_H9D23pl0E-f8rUugJt-NE',
@@ -13,4 +15,16 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-export { db };
+export { db, app };
+export const auth = getAuth(app);
+
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    LocalStorage.set('user', user);
+    console.log('User is signed in');
+    console.log(user);
+  } else {
+    LocalStorage.remove('user');
+    console.log('User is signed out');
+  }
+});

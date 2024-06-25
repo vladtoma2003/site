@@ -1,13 +1,13 @@
 <template>
   <div>
     <h1>Login</h1>
-    <q-form @submit.prevent="submitForm">
+    <q-form ref="form" @submit="submitLog">
       <q-card-section>
-        <q-input label="Email" v-model="login.email"></q-input>
+        <q-input label="Email" v-model="user.email"></q-input>
         <q-input
           label="Password"
           type="password"
-          v-model="login.password"
+          v-model="user.password"
         ></q-input>
         <br />
         <q-btn
@@ -26,43 +26,30 @@
   </div>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      login: {
-        email: '',
-        password: '',
-      },
-    };
-  },
-  methods: {
-    submitForm() {
-      // TODO: Log in user when backend is ready
-      if (!this.login.email || !this.login.password) {
-        this.$q.notify({
-          message: 'Please fill in all fields',
-          color: 'negative',
-        });
-      } else if (!this.login.email.includes('@')) {
-        this.$q.notify({
-          message: 'Please enter a valid email',
-          color: 'negative',
-        });
-      } else if (this.login.password.length < 8) {
-        this.$q.notify({
-          message: 'Password must be at least 8 characters long',
-          color: 'negative',
-        });
-      } else {
-        this.$q.notify({
-          message: 'Login successful',
-          color: 'positive',
-        });
-        // this.loginUser();
-      }
-    },
-  },
+<script setup>
+import { ref, reactive } from 'vue';
+import login from 'src/firebase/firebase-login';
+import { useRouter } from 'vue-router';
+
+const user = reactive({
+  email: '',
+  password: '',
+});
+
+const form = ref(null);
+const router = useRouter();
+
+const submitLog = async () => {
+  console.log(user);
+
+  if (form.value && form.value.validate()) {
+    try {
+      await login(user);
+      router.push('/HomePage');
+    } catch (error) {
+      console.error(error);
+    }
+  }
 };
 </script>
 

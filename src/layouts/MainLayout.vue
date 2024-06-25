@@ -16,12 +16,27 @@
           <q-btn
             label="Log In"
             color="secondary"
+            v-if="!isLoggedIn"
             @click="() => $router.push('/LogInPage')"
           ></q-btn>
           <q-btn
             label="Register"
             color="accent"
+            v-if="!isLoggedIn"
             @click="() => $router.push('/RegisterPage')"
+          ></q-btn>
+          <q-btn
+            v-if="isLoggedIn"
+            @click="() => $router.push('/ProfilePage')"
+            label="Profile"
+            color="primary"
+          ></q-btn>
+          <q-btn
+            v-if="isLoggedIn"
+            flat
+            @click="logOut"
+            label="Log Out"
+            color="negative"
           ></q-btn>
         </div>
       </q-toolbar>
@@ -38,5 +53,23 @@ defineOptions({
   name: 'MainLayout',
 });
 import { useRouter } from 'vue-router';
+import logout from 'src/firebase/firebase-logout';
+import { ref } from 'vue';
+import { getAuth } from 'firebase/auth';
+import { onAuthStateChanged } from 'firebase/auth';
+
+const isLoggedIn = ref(false);
+const auth = getAuth();
+
+// dynamically detect if user is logged in
+onAuthStateChanged(auth, (user) => {
+  isLoggedIn.value = !!user;
+});
+
 const $router = useRouter();
+const logOut = async () => {
+  logout().then(() => {
+    $router.push('/LogInPage');
+  });
+};
 </script>
