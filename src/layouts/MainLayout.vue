@@ -7,10 +7,16 @@
           color="pink"
           @click="() => $router.push('/HomePage')"
         ></q-btn>
-        <q-btn
+        <!-- <q-btn
           label="Index Page"
           color="primary"
           @click="() => $router.push('/')"
+        ></q-btn> -->
+        <q-btn
+          label="Post a product"
+          color="primary"
+          v-if="isLoggedIn"
+          @click="() => $router.push('/postProduct')"
         ></q-btn>
         <div class="q-ml-auto q-gutter-x-sm">
           <q-btn
@@ -29,6 +35,13 @@
             v-if="isLoggedIn"
             @click="() => $router.push('/userProfile')"
             label="Profile"
+            color="primary"
+          ></q-btn>
+          <q-btn
+            v-if="isLoggedIn"
+            flat
+            @click="() => $router.push('/cart')"
+            label="Cart"
             color="primary"
           ></q-btn>
           <q-btn

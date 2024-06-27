@@ -9,6 +9,8 @@ const addUser = async (user) => {
     uid: user.uid,
     email: user.email,
     displayName: user.displayName,
+    products: [],
+    cart: [],
   });
 };
 

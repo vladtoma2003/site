@@ -35,6 +35,7 @@
           @click="saveChanges"
         ></q-btn>
       </q-card-section>
+      <div clas="row"></div>
     </q-card>
   </div>
 </template>

@@ -2,6 +2,7 @@ import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { LocalStorage } from 'quasar';
+import { getStorage } from 'firebase/storage';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyAe8RFK_HyZA_H9D23pl0E-f8rUugJt-NE',
@@ -14,8 +15,9 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const storage = getStorage(app);
 
-export { db, app };
+export { db, app, storage };
 export const auth = getAuth(app);
 
 onAuthStateChanged(auth, (user) => {
