@@ -9,7 +9,6 @@
       <p>Seller: {{ item.seller }}</p>
       Contact info: {{ item.email }}
       <q-btn color="primary" @click="() => removeItem(item)" :rounded="true">
-        -->
         <q-icon name="remove" />
       </q-btn>
     </div>
