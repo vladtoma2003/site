@@ -41,6 +41,7 @@ interface Details {
 const localImages = ref<Details[]>([]);
 
 async function getServerImages() {
+  // map the users to get their images
   const usersRef = collection(db, 'users');
   const usersDoc = await getDocs(usersRef);
   const users = usersDoc.docs.map((doc) => doc.data());
@@ -66,13 +67,15 @@ async function getServerImages() {
       const mail = details ? details.email : 'Unknown Email';
 
       const product = products.find((prod) => prod.data.name === name);
-      console.log(product);
+      // console.log(product);
 
       const price = product ? product.data.price : 'Unknown Price';
       const description = product
         ? product.data.description
         : 'Unknown Description';
       const currid = product ? product.id : 'Unknown ID';
+      console.log('Prod');
+      console.log(product);
 
       localImages.value.push({
         name: name,
