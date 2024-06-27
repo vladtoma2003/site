@@ -47,6 +47,16 @@ const routes: RouteRecordRaw[] = [
     component: () => import('layouts/MainLayout.vue'),
     children: [{ path: '', component: () => import('pages/CartPage.vue') }],
   },
+  {
+    path: '/search',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [{ path: '', component: () => import('pages/SearchPage.vue') }],
+  },
+  {
+    path: '/product',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [{ path: '', component: () => import('pages/ProductPage.vue') }],
+  },
 ];
 
 export default routes;
