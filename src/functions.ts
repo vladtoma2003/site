@@ -19,6 +19,12 @@ interface Product {
   data: Details;
 }
 
+interface CartItem {
+  id: string;
+  url: string;
+  ammount: number;
+}
+
 async function getServerImages(productsParam?: Product[]) {
   const localImages = ref<Details[]>([]);
   // map the users to get their images
@@ -91,13 +97,30 @@ const addToCart = async (item: Details) => {
       return;
     }
 
+    if (item.seller === currentUser.displayName) {
+      Notify.create({
+        message: 'You cannot add your own items to the cart',
+        color: 'negative',
+        position: 'top',
+      });
+      return;
+    }
+
     const userRef = doc(db, 'users', currentUser.uid);
     const userDoc = await getDoc(userRef);
     const userData = userDoc.data();
     const cart = userData ? userData.cart : [];
 
-    cart.push({ id: item.id, url: item.url });
-    await setDoc(userRef, { cart: cart }, { merge: true });
+    if (!cart.find((cartItem: CartItem) => cartItem.id === item.id)) {
+      cart.push({ id: item.id, url: item.url, ammount: 1 });
+      await setDoc(userRef, { cart: cart }, { merge: true });
+    } else {
+      const currItem = cart.find(
+        (cartItem: CartItem) => cartItem.id === item.id
+      );
+      currItem.ammount++;
+      await setDoc(userRef, { cart: cart }, { merge: true });
+    }
   } catch (error) {
     Notify.create({
       message: 'Error adding item to cart',
@@ -108,5 +131,20 @@ const addToCart = async (item: Details) => {
   }
 };
 
-export { getServerImages, addToCart };
+async function getProductDetails(id: string) {
+  const productDoc = await getDoc(doc(db, 'products', id));
+
+  const productData = productDoc.data() as {
+    name: string;
+    price?: string;
+    description?: string;
+    seller: string;
+    email: string;
+    url: string;
+  };
+
+  return { id: productDoc.id, data: { id: id, ...productData } };
+}
+
+export { getServerImages, addToCart, getProductDetails };
 export type { Details, Product };

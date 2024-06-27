@@ -30,11 +30,41 @@
 import { getServerImages, addToCart, Details } from 'src/functions';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+// import { auth } from 'src/firebase/index.js';
+
+// const user = auth.currentUser;
 
 const localImages = ref<Details[]>([]);
+
+// interface Image {
+//   description: string;
+//   email: string;
+//   id: string;
+//   name: string;
+//   price: string;
+//   seller: string;
+//   url: string;
+// }
+
 getServerImages().then((images) => {
+  // remove the images that are posted by the currently logged user
+  // if (!user) {
+  //   localImages.value = images;
+  //   return;
+  // }
+  // images = images.filter((image) => image.name.split(' ')[0] !== user?.uid);
   localImages.value = images;
+  console.log('ASDASFDAS');
+  console.log(images);
+  // console.log('AAAASSAF');
+  // console.log(localImages.value);
 });
+
+// async function getUnOwnedImages(images: []Image) {
+//   images.forEach(img => {
+
+//   });
+// }
 
 const router = useRouter();
 function goToProductPage(id: string) {

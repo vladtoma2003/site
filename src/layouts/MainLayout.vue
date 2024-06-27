@@ -49,13 +49,6 @@
             label="Cart"
             color="primary"
           ></q-btn>
-          <q-btn
-            v-if="isLoggedIn"
-            flat
-            @click="logOut"
-            label="Log Out"
-            color="negative"
-          ></q-btn>
         </div>
       </q-toolbar>
     </q-header>
@@ -71,7 +64,6 @@ defineOptions({
   name: 'MainLayout',
 });
 import { useRouter } from 'vue-router';
-import logout from 'src/firebase/firebase-logout';
 import { ref } from 'vue';
 import { getAuth } from 'firebase/auth';
 import { onAuthStateChanged } from 'firebase/auth';
@@ -90,9 +82,5 @@ onAuthStateChanged(auth, (user) => {
 });
 
 const $router = useRouter();
-const logOut = async () => {
-  logout().then(() => {
-    $router.push('/LogInPage');
-  });
-};
+
 </script>

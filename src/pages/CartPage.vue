@@ -4,6 +4,7 @@
     <div v-for="item in items" :key="item.id">
       <img :src="item.url" alt="Loaded Image" />
       <p>Item name: {{ item.name }}</p>
+      <p>Ammount in cart: {{ item.ammount }}</p>
       <p>price: {{ item.price }}</p>
       <p>Description: {{ item.description }}</p>
       <p>Seller: {{ item.seller }}</p>
@@ -17,7 +18,6 @@
 
 <script setup lang="ts">
 import { db, auth } from 'src/firebase/index.js';
-// import { defineComponent } from 'vue';
 import { collection, doc, getDoc, getDocs, setDoc } from 'firebase/firestore';
 import { Notify } from 'quasar';
 import { onAuthStateChanged } from 'firebase/auth';
@@ -32,11 +32,13 @@ interface Item {
   owner: string;
   email: string;
   url: string;
+  ammount: number;
 }
 
 interface Cart {
   id: string;
   url: string;
+  ammount: number;
 }
 
 const items = ref([] as Item[]);
@@ -87,10 +89,15 @@ async function getCartItems() {
     const userData = currUser ? currUser.data() : {};
     item.data.seller = userData.displayName;
     item.data.email = userData.email;
+    item.data.id = item.id;
+    item.data.ammount = cart.find(
+      (cartItem: Cart) => cartItem.id === item.id
+    )?.ammount;
   });
 
   console.log(cartItems);
   items.value = cartItems.map((item) => item.data);
+  console.log(items.value);
 }
 
 async function removeItem(item: Item) {
@@ -103,12 +110,19 @@ async function removeItem(item: Item) {
   const user = userDoc.data();
   const newCart = user ? user.cart : [];
   const index = newCart.findIndex((cartItem: Item) => cartItem.id === item.id);
+  console.log(item);
   if (index !== -1) {
-    newCart.splice(index, 1);
+    if (newCart[index].ammount > 1) {
+      newCart[index].ammount--;
+    } else {
+      newCart.splice(index, 1);
+    }
   }
+  console.log(newCart);
   await setDoc(userData, { cart: newCart }, { merge: true });
 
   items.value = newCart;
+  getCartItems();
 }
 
 getCartItems();

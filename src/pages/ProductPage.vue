@@ -21,28 +21,17 @@
 
 <script setup lang="ts">
 import { useRoute } from 'vue-router';
-import { getDoc, doc } from 'firebase/firestore';
-import { db } from 'src/firebase/index.js';
-import { Details, getServerImages, Product, addToCart } from 'src/functions';
+import {
+  Details,
+  getServerImages,
+  Product,
+  addToCart,
+  getProductDetails,
+} from 'src/functions';
 import { onMounted, ref } from 'vue';
 
 const route = useRoute();
 const id = route.query.id as string;
-
-async function getProductDetails(id: string) {
-  const productDoc = await getDoc(doc(db, 'products', id));
-
-  const productData = productDoc.data() as {
-    name: string;
-    price?: string;
-    description?: string;
-    seller: string;
-    email: string;
-    url: string;
-  };
-
-  return { id: productDoc.id, data: { id: id, ...productData } };
-}
 
 const localImages = ref<Details[]>([]);
 
