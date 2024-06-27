@@ -4,16 +4,20 @@
       <q-toolbar>
         <q-btn
           label="Home screen"
+          icon="home"
           color="pink"
           @click="() => $router.push('/HomePage')"
         ></q-btn>
-        <q-btn
-          label="Post a product"
-          color="primary"
-          v-if="isLoggedIn"
-          @click="() => $router.push('/postProduct')"
-        ></q-btn>
-        <div class="]">
+        <div class="q-px-lg">
+          <q-btn
+            label="Post a product"
+            icon="monetization_on"
+            color="blue"
+            v-if="isLoggedIn"
+            @click="() => $router.push('/postProduct')"
+          ></q-btn>
+        </div>
+        <div class="q-px-xl">
           <q-toolbar>
             <q-input
               filled
@@ -37,16 +41,18 @@
             @click="() => $router.push('/RegisterPage')"
           ></q-btn>
           <q-btn
-            v-if="isLoggedIn"
-            @click="() => $router.push('/userProfile')"
-            label="Profile"
-            color="primary"
-          ></q-btn>
-          <q-btn
+            icon="shopping_cart"
             v-if="isLoggedIn"
             flat
             @click="() => $router.push('/cart')"
             label="Cart"
+            color="primary"
+          ></q-btn>
+          <q-btn
+            v-if="isLoggedIn"
+            @click="() => $router.push('/userProfile')"
+            label="Profile"
+            icon="person"
             color="primary"
           ></q-btn>
         </div>
@@ -82,5 +88,4 @@ onAuthStateChanged(auth, (user) => {
 });
 
 const $router = useRouter();
-
 </script>

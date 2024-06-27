@@ -2,7 +2,7 @@
   <q-page-container>
     <h1>Home Page</h1>
     <q-page class="row">
-      <div v-for="image in localImages" :key="image.url" class="q-px-md">
+      <div v-for="image in localImages" :key="image.url" class="q-px-xl">
         <img
           :src="image.url"
           alt="Loaded Image"
@@ -10,7 +10,7 @@
         />
         <p>Item name: {{ image.name }}</p>
         <p>price: {{ image.price }}</p>
-        <p>Description: {{ image.description }}</p>
+        <p style="max-width: 250px">Description: {{ image.description }}</p>
         <p>Seller: {{ image.seller }}</p>
         <p>Contact info: {{ image.email }}</p>
         <q-btn

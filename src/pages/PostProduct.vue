@@ -34,6 +34,9 @@ import { ref as storageRef, uploadBytes } from 'firebase/storage';
 import { db, storage } from 'src/firebase/index.js';
 import { addDoc, collection, getDoc, doc, setDoc } from 'firebase/firestore';
 import { Notify } from 'quasar';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 interface Product {
   name: string;
@@ -84,6 +87,7 @@ const submitProd = async () => {
       position: 'top',
     });
   }
+  router.push('/HomePage');
 };
 
 async function uploadImage(files: readonly File[]): Promise<void> {
