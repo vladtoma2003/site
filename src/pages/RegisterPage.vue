@@ -11,6 +11,16 @@
           label="Password"
           type="password"
         ></q-input>
+        <q-checkbox
+          v-model="user.isBuyer"
+          @update:model-value="updateCheckbox('isBuyer')"
+          label="I'm Buying"
+        ></q-checkbox>
+        <q-checkbox
+          v-model="user.isSeller"
+          @update:model-value="updateCheckbox('isSeller')"
+          label="I'm Selling"
+        ></q-checkbox>
         <br />
         <q-btn
           class="full-width"
@@ -39,6 +49,8 @@ const user = reactive({
   lastName: '',
   email: '',
   password: '',
+  isBuyer: true,
+  isSeller: false,
 });
 
 const form = ref(null);
@@ -54,13 +66,28 @@ const submitReg = async () => {
     router.push('/HomePage');
   }
 };
+
+function updateCheckbox(role) {
+  if (role === 'isBuyer') {
+    user.isBuyer = true;
+    user.isSeller = false; // Ensure only one checkbox can be checked
+  } else if (role === 'isSeller') {
+    user.isSeller = true;
+    user.isBuyer = false; // Ensure only one checkbox can be checked
+  }
+  console.log(role);
+  console.log(user);
+}
 </script>
 
-<style scoped>
-div {
+<style scoped></style>
+<!-- .checkbox-container {
+  display: flex;
+  justify-content: space-between; /* Adjust this as needed */
+} -->
+<!-- div {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-}
-</style>
+} -->

@@ -35,18 +35,6 @@
           @click="saveChanges"
         ></q-btn>
       </q-card-section>
-      <div clas="row">
-        <q-card-section>
-          <h2>Posted Products</h2>
-          <div v-for="product in postedProds" :key="product.id">
-            <img :src="product.url" alt="Product Image" />
-            <p>Item name: {{ product.name }}</p>
-            <p>Price: {{ product.price }}</p>
-            <p>url: {{ product.url }}</p>
-            <p>Description: {{ product.description }}</p>
-          </div>
-        </q-card-section>
-      </div>
     </q-card>
     <q-fab
       class="q-mr-md"
@@ -66,7 +54,7 @@ import { db } from 'src/firebase/index.js';
 import { onMounted } from 'vue';
 import { getDoc, doc, setDoc } from 'firebase/firestore';
 import { auth } from 'src/firebase/index.js';
-import { Details, getProductDetails, getServerImages } from 'src/functions';
+// import { Details } from 'src/functions';
 import logout from 'src/firebase/firebase-logout';
 import { useRouter } from 'vue-router';
 
@@ -86,7 +74,7 @@ const user = ref<User>({
 });
 
 // const postedProds: Product[] = [];
-const postedProds = ref<Details[]>([]);
+// const postedProds = ref<Details[]>([]);
 
 const isEditing = reactive({ value: false });
 
@@ -128,21 +116,21 @@ async function getUserData() {
       user.value.postedProducts = docRef.data().products;
     }
   }
-  await getProducts();
+  // await getProducts();
 }
 
-async function getProducts() {
-  const productPromises = user.value.postedProducts.map(async (prod) => {
-    const productDetails = await getProductDetails(prod);
-    return productDetails;
-  });
+// async function getProducts() {
+//   const productPromises = user.value.postedProducts.map(async (prod) => {
+//     const productDetails = await getProductDetails(prod);
+//     return productDetails;
+//   });
 
-  // Wait for all product details to be fetched and resolved
-  const products = await Promise.all(productPromises);
+//   // Wait for all product details to be fetched and resolved
+//   const products = await Promise.all(productPromises);
 
-  const serverImages = await getServerImages(products);
-  postedProds.value = serverImages;
-}
+//   const serverImages = await getServerImages(products);
+//   postedProds.value = serverImages;
+// }
 
 async function logOut() {
   logout().then(() => {

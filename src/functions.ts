@@ -1,5 +1,11 @@
 import { storage, db, auth } from 'src/firebase/index.js';
-import { getDownloadURL, listAll, ref as storageRef } from 'firebase/storage';
+import {
+  uploadBytes,
+  getDownloadURL,
+  listAll,
+  ref as storageRef,
+  // getBlob,
+} from 'firebase/storage';
 import { ref } from 'vue';
 import { collection, doc, getDocs, getDoc, setDoc } from 'firebase/firestore';
 import { Notify } from 'quasar';
@@ -25,6 +31,14 @@ interface CartItem {
   ammount: number;
 }
 
+interface dbProducts {
+  name: string;
+  price: string;
+  description: string;
+  owner: string;
+  imageName: string;
+}
+
 async function getServerImages(productsParam?: Product[]) {
   const localImages = ref<Details[]>([]);
   // map the users to get their images
@@ -46,7 +60,7 @@ async function getServerImages(productsParam?: Product[]) {
       return { id: doc.id, data: doc.data() as Details };
     });
   }
-  console.log(products);
+  // console.log(products);
 
   images.forEach(async (imageRef) => {
     const imageUrls = await listAll(imageRef);
@@ -67,8 +81,8 @@ async function getServerImages(productsParam?: Product[]) {
           ? product.data.description
           : 'Unknown Description';
         const currid = product ? product.id : 'Unknown ID';
-        console.log('Prod');
-        console.log(product);
+        // console.log('Prod');
+        // console.log(product);
 
         localImages.value.push({
           name: name,
@@ -146,5 +160,31 @@ async function getProductDetails(id: string) {
   return { id: productDoc.id, data: { id: id, ...productData } };
 }
 
-export { getServerImages, addToCart, getProductDetails };
-export type { Details, Product };
+async function editProductDetails(id: string, data: dbProducts, file: File) {
+  try {
+    const oldProduct = await getDoc(doc(db, 'products', id));
+    await setDoc(doc(db, 'products', id), data, { merge: true });
+    // modify the image name
+    if (auth.currentUser) {
+      const currentUserId = auth.currentUser ? auth.currentUser.uid : '';
+
+      const userImagesRef = storageRef(storage, currentUserId);
+      const images = await listAll(userImagesRef);
+      const oldProductData = oldProduct.data() as dbProducts;
+      const image = images.items.find((image) => {
+        return image.name.split('.')[0] === oldProductData.name;
+      });
+      const type = image?.name.split('.')[1];
+      const newName = currentUserId + '/' + data.name + '.' + type;
+
+      const newImageRef = await storageRef(storage, newName);
+      console.log(newName);
+      await uploadBytes(newImageRef, file);
+    }
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export { getServerImages, addToCart, getProductDetails, editProductDetails };
+export type { Details, Product, dbProducts };
